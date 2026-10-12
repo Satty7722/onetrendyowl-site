@@ -1,0 +1,1502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<style id="ssg-kit">
+/* ssg foundation: a token-driven floor, injected on every page before the page's
+   own styles. The page sets its brand by overriding these tokens in its own :root.
+   Defaults are deliberately neutral and monochrome, so a page that under-styles
+   still reads as intentional rather than off-brand. No color identity is imposed. */
+:root{
+  --bg:#ffffff;
+  --fg:#16181d;
+  --muted:#697086;
+  --surface:#f6f7f9;
+  --border:#e6e8ec;
+  --accent:#16181d;
+  --accent-2:#5b6472;
+  --on-accent:#ffffff;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(16,18,24,.06), 0 14px 36px -14px rgba(16,18,24,.20);
+  --font-display:Georgia, "Times New Roman", serif;
+  --font-body:-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono:ui-monospace, SFMono-Regular, Menlo, monospace;
+  --maxw:1180px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--fg);
+  font-family:var(--font-body);
+  font-size:17px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--font-display);line-height:1.1;font-weight:700;margin:0 0 .5em}
+p{margin:0 0 1em}
+a{color:inherit}
+img{max-width:100%;height:auto;display:block}
+
+/* layout: .container centers content in a max-width column with comfortable gutters */
+.container{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(20px,5vw,40px)}
+.section{padding-block:clamp(56px,9vw,120px)}
+
+/* grids that never overflow and collapse cleanly on small screens */
+.grid{display:grid;gap:clamp(16px,2.4vw,28px)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid>*{min-width:0}
+
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5em;
+  min-height:44px;padding:.85em 1.5em;border:1px solid transparent;border-radius:var(--radius);
+  font:inherit;font-weight:600;line-height:1.25;text-decoration:none;cursor:pointer;
+  /* a long label wraps and stays inside its box instead of running off the screen */
+  max-width:100%;white-space:normal;text-align:center;
+  transition:transform .15s ease, box-shadow .2s ease, background .2s ease, opacity .2s ease;
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);color:var(--on-accent)}
+.btn-primary:hover{box-shadow:var(--shadow);opacity:.94}
+.btn-ghost{background:transparent;color:var(--fg);border-color:var(--border)}
+.btn-ghost:hover{background:var(--surface)}
+
+/* surfaces */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:clamp(20px,3vw,32px)}
+.glass{
+  background:color-mix(in srgb, var(--bg) 70%, transparent);
+  border:1px solid color-mix(in srgb, var(--fg) 12%, transparent);
+  border-radius:var(--radius);
+  backdrop-filter:blur(14px) saturate(1.4);
+  -webkit-backdrop-filter:blur(14px) saturate(1.4);
+}
+
+/* small bits */
+.eyebrow{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2)}
+.chip{display:inline-flex;align-items:center;gap:.4em;padding:.35em .8em;border:1px solid var(--border);border-radius:999px;font-size:.9rem;background:var(--surface)}
+.badge{display:inline-flex;align-items:center;padding:.25em .6em;border-radius:999px;font-size:.75rem;font-weight:600;background:var(--accent);color:var(--on-accent)}
+.grad{background:linear-gradient(100deg, var(--accent), var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* native form controls, styled */
+label{display:block;font-weight:600;font-size:.95rem;margin-bottom:.4em}
+input,textarea,select{
+  width:100%;font:inherit;color:var(--fg);background:var(--bg);
+  border:1px solid var(--border);border-radius:calc(var(--radius) - 4px);padding:.8em 1em;
+}
+textarea{min-height:120px;resize:vertical}
+input::placeholder,textarea::placeholder{color:var(--muted)}
+input:focus,textarea:focus,select:focus{
+  outline:none;border-color:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* atmosphere helpers, tinted from the brand tokens so they follow the palette */
+.bg-mesh{
+  background-image:
+    radial-gradient(40% 60% at 15% 10%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%),
+    radial-gradient(45% 55% at 85% 20%, color-mix(in srgb, var(--accent-2) 16%, transparent), transparent 60%),
+    radial-gradient(50% 50% at 50% 100%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%);
+}
+.bg-grain{position:relative}
+.bg-grain::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* CSS-only entrance: auto-plays on load and always ends visible, never needs JS */
+@keyframes ssg-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.rise{animation:ssg-rise .7s cubic-bezier(.2,.7,.2,1) both}
+.d1{animation-delay:.06s}
+.d2{animation-delay:.12s}
+.d3{animation-delay:.18s}
+.d4{animation-delay:.26s}
+.d5{animation-delay:.34s}
+.d6{animation-delay:.42s}
+
+/* responsive */
+@media (max-width:1024px){.grid-3,.grid-4{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:768px){
+  body{font-size:16px}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+}
+
+/* ---------------------------------------------------------------------------
+   MOBILE SAFETY FLOOR
+   Every rule below is wrapped in :where(), which carries ZERO specificity. The
+   page's own CSS therefore always wins: these can fill a gap the page left, but
+   they can never override a deliberate choice. That is what makes it safe to
+   apply them to any page, however it was designed.
+
+   They exist because a page that scrolls sideways on a phone is broken for most
+   of its traffic, and no amount of instruction to the model makes that
+   impossible. This is the floor that holds when the model slips.
+   --------------------------------------------------------------------------- */
+
+/* A flex or grid child will not shrink below its own content by default. That is
+   what lets a single long word, or one wide card, shove an entire row off the
+   screen. This is the single highest-value line here. */
+:where(*){min-width:0}
+
+/* Anything intrinsically wide is capped to the box it sits in. */
+:where(img,svg,video,canvas,iframe,embed,object){max-width:100%}
+:where(iframe,video){height:auto}
+
+/* Long words, URLs and email addresses wrap instead of widening the layout. */
+:where(body){overflow-wrap:break-word}
+
+/* Wide code and tables scroll inside themselves rather than dragging the page. */
+:where(pre){max-width:100%;overflow-x:auto}
+:where(table){max-width:100%}
+
+/* Buttons: the ONE place the floor overrides the page rather than deferring to it.
+   Generated pages routinely write `.btn { white-space: nowrap }`, and because the
+   page's stylesheet loads after this one it wins, forcing a long label onto a single
+   line and marching it straight out of the button and off the screen. Every other
+   rule here is :where() so the page always wins, but a button whose text escapes its
+   own box is not a design choice, it is a broken button, and there is no layout in
+   which that is what the author wanted. So white-space is forced, and only
+   white-space: padding, colour, radius, shadow and size are all left to the page. */
+button,.btn,[role="button"],input[type="submit"],input[type="button"],a.btn{
+  max-width:100%;
+  white-space:normal !important;
+  overflow-wrap:break-word;
+}
+
+/* Form controls never exceed their container. */
+:where(input,textarea,select,fieldset){max-width:100%}
+
+/* Last resort: nothing may create a sideways scrollbar. clip is preferred over
+   hidden because hidden turns the page into a scroll container, which silently
+   breaks position:sticky headers. hidden stays as the fallback for old browsers. */
+:where(html){overflow-x:hidden}
+@supports (overflow-x:clip){:where(html){overflow-x:clip}}
+
+/* respect reduced motion: content stays visible, motion is neutralized */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important;
+  }
+}
+
+
+/* Hero text readability floor. Even when the page under-darkens its hero overlay, a
+   heading sitting on a photo keeps a faint halo so it never dissolves into a bright
+   sky. Applied only to headings inside a hero-like section, and only a shadow, so it
+   never changes a design that is already readable. hero text keeps a faint halo */
+:where([class*="hero"]) :where(h1,h2){text-shadow:0 1px 24px rgba(0,0,0,0.28),0 1px 3px rgba(0,0,0,0.22)}
+
+/* Pop-up form (editor block): hidden until its trigger link sets the :target hash. */
+#lead-popup{display:none}
+#lead-popup:target{display:flex}
+
+/* Glyphs inside a menu toggle must not swallow the tap: the tap must register on the button itself, so the button is still the event target when a close-on-outside-tap handler checks where the tap landed. */
+:where(button,[role="button"]):where([aria-expanded],[aria-controls],[class*="hamburger"],[class*="menu-toggle"],[class*="nav-toggle"],[class*="burger"],[class*="mobile-menu"]) :where(svg,path,line,rect,circle,polyline,span,i,em,b){pointer-events:none}
+
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Learn what Answer Engine Optimization (AEO) is, how AI search engines like ChatGPT, Perplexity, and Google Gemini decide who to recommend, and why your business needs AEO now." />
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.onetrendyowl.com/">
+<meta property="og:title" content="AEO Explained | One Trendy Owl Digital - What Is Answer Engine Optimization?">
+<meta property="og:description" content="Learn what Answer Engine Optimization (AEO) is, how AI search engines like ChatGPT, Perplexity, and Google Gemini decide who to recommend, and why your business needs AEO now.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AEO Explained | One Trendy Owl Digital - What Is Answer Engine Optimization?">
+<meta name="twitter:description" content="Learn what Answer Engine Optimization (AEO) is, how AI search engines like ChatGPT, Perplexity, and Google Gemini decide who to recommend, and why your business needs AEO now.">
+<title>AEO Explained | One Trendy Owl Digital - What Is Answer Engine Optimization?</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600..800;1,9..144,400..600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script type="application/ld+json" data-wb="model">{"@context": "https://schema.org", "@graph": [{"@type": ["Organization", "LocalBusiness"], "@id": "https://www.onetrendyowl.com/#organization", "name": "One Trendy Owl Digital", "url": "https://www.onetrendyowl.com/", "description": "One Trendy Owl Digital specializes in Answer Engine Optimization (AEO), helping small businesses and e-commerce stores get recommended by ChatGPT, Perplexity, and Google Gemini.", "areaServed": "Worldwide", "knowsAbout": "Answer Engine Optimization", "email": "hello@onetrendyowl.com"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need to rebuild my website for AEO?", "acceptedAnswer": {"@type": "Answer", "text": "No. We work within your existing site and make targeted improvements without disrupting what you already have."}}, {"@type": "Question", "name": "How quickly will I see AEO results?", "acceptedAnswer": {"@type": "Answer", "text": "AI search visibility typically improves within 4 to 8 weeks of implementing structured data and content changes, though timelines vary by industry."}}, {"@type": "Question", "name": "Is AEO just for tech companies?", "acceptedAnswer": {"@type": "Answer", "text": "Not at all. Local plumbers, dentists, consultants, and e-commerce stores all benefit from AI recommendations, often more than large brands."}}, {"@type": "Question", "name": "What if I do not have a big budget for AEO?", "acceptedAnswer": {"@type": "Answer", "text": "Our AI Search Audit starts at $99. It is designed to give small businesses a clear starting point without a large upfront investment."}}, {"@type": "Question", "name": "Will AEO replace my existing SEO?", "acceptedAnswer": {"@type": "Answer", "text": "No. AEO builds on your existing SEO foundation. We add the structured data and content layers that AI engines specifically need."}}, {"@type": "Question", "name": "Do I need to know anything technical to get started with AEO?", "acceptedAnswer": {"@type": "Answer", "text": "Nothing. We handle every technical step, including schema markup, structured data, and chatbot setup, from start to finish."}}]}]}</script>
+<style id="editor-css">
+:root {
+  --accent:       #18a49b;
+  --accent-dark:  #12847d;
+  --accent-light: #e6f7f6;
+  --accent-mid:   #a8e0dd;
+  --bg:           #ffffff;
+  --surface:      #f7fafa;
+  --surface-2:    #edf6f5;
+  --fg:           #0f2224;
+  --fg-muted:     #3d5a5c;
+  --fg-faint:     #7a9fa2;
+  --on-accent:    #ffffff;
+  --border:       #d4ecea;
+  --border-strong:#9fd4d0;
+  --shadow-sm:    0 2px 8px rgba(24,164,155,0.08);
+  --shadow-md:    0 8px 32px rgba(24,164,155,0.12);
+  --shadow-lg:    0 20px 60px rgba(24,164,155,0.15);
+  --radius:       8px;
+  --radius-lg:    16px;
+  --maxw:         1160px;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'Plus Jakarta Sans', sans-serif;
+  --font-mono:    'Plus Jakarta Sans', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent-mid); color: var(--fg); }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  margin: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 0;
+  max-width: 100%;
+}
+p {
+  margin: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 0;
+  max-width: 100%;
+}
+* { max-width: 100%; }
+html, body { max-width: none; }
+canvas, .regions-marquee, .marquee-track { max-width: none; }
+
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 28px;
+  box-sizing: border-box;
+}
+.section-pad { padding: 96px 0; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-family: var(--font-body);
+  max-width: 100%;
+}
+.eyebrow::before {
+  content: '';
+  display: block;
+  width: 20px;
+  min-width: 20px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 22px;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 2px solid transparent;
+  white-space: normal;
+  line-height: 1.25;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+}
+.btn svg { width: 17px; height: 17px; flex-shrink: 0; transition: transform 0.22s ease; }
+.btn:hover svg { transform: translateX(3px); }
+.btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 4px 18px rgba(24,164,155,0.35);
+}
+.btn-primary:hover {
+  background: var(--accent-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(24,164,155,0.45);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.btn-ghost:hover {
+  background: var(--accent-light);
+  transform: translateY(-2px);
+}
+.btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* NAV */
+header.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow 0.3s;
+  max-width: none;
+}
+header.site-header.scrolled {
+  box-shadow: var(--shadow-md);
+}
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: 70px;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 28px;
+  box-sizing: border-box;
+}
+.header-brand {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 0;
+}
+.header-brand img {
+  height: 48px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+}
+.header-nav {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+}
+.header-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.header-nav a {
+  display: block;
+  padding: 7px 14px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--fg-muted);
+  border-radius: var(--radius);
+  transition: color 0.2s, background 0.2s;
+}
+.header-nav a:hover,
+.header-nav a.active {
+  color: var(--accent);
+  background: var(--accent-light);
+}
+.header-cta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  min-width: 0;
+}
+.hamburger {
+  display: none;
+  background: none;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius);
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  cursor: pointer;
+  color: var(--fg);
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.hamburger svg { pointer-events: none; width: 22px; height: 22px; }
+.hamburger:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 70px; left: 0; right: 0; bottom: 0;
+  z-index: 99;
+  background: #ffffff;
+  border-top: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 24px 28px 40px;
+  flex-direction: column;
+  gap: 0;
+  max-width: none;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a.mob-link {
+  display: block;
+  padding: 15px 4px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--fg);
+  border-bottom: 1px solid var(--border);
+  transition: color 0.2s;
+}
+.mobile-menu a.mob-link:hover { color: var(--accent); }
+.mobile-menu .mob-cta { margin-top: 28px; }
+.mobile-menu .mob-cta .btn { width: 100%; justify-content: center; }
+
+/* HERO */
+.hero {
+  position: relative;
+  padding: 160px 0 100px;
+  overflow: hidden;
+  background: var(--bg);
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  max-width: none;
+}
+#dot-wave {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  max-width: none;
+  width: 100%;
+  height: 100%;
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  width: 100%;
+}
+.hero-copy { min-width: 0; width: 100%; }
+.hero-copy .eyebrow { margin-bottom: 20px; }
+.hero-copy h1 {
+  font-size: clamp(2rem, 4.8vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.06;
+  margin-bottom: 22px;
+  color: var(--fg);
+}
+.hero-copy h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+.hero-copy .sub {
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  color: var(--fg-muted);
+  margin-bottom: 34px;
+  line-height: 1.7;
+}
+.hero-copy .cta-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.hero-trust {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.hero-trust .trust-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--fg-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+.hero-trust .trust-pill svg {
+  width: 13px; height: 13px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.hero-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+}
+
+/* Signal diagram */
+.signal-diagram {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.signal-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  min-width: 0;
+}
+.signal-row:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+.signal-icon {
+  width: 38px; height: 38px;
+  min-width: 38px;
+  border-radius: 10px;
+  background: var(--accent-light);
+  border: 1.5px solid var(--border);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.signal-icon svg { width: 18px; height: 18px; color: var(--accent); }
+.signal-label { flex: 1; min-width: 0; }
+.signal-label .sl-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--fg);
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.signal-label .sl-sub {
+  font-size: 11.5px;
+  color: var(--fg-faint);
+  margin-top: 2px;
+  overflow-wrap: anywhere;
+}
+.signal-bar-wrap {
+  width: 70px;
+  min-width: 70px;
+  flex-shrink: 0;
+}
+.signal-bar-track {
+  height: 6px;
+  background: var(--surface-2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.signal-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+  width: 0;
+  animation: bar-fill 1.8s cubic-bezier(0.2,0.8,0.2,1) both;
+}
+.signal-row-1 .signal-bar-fill { animation-delay: 0.3s;  --bar-target: 92%; }
+.signal-row-2 .signal-bar-fill { animation-delay: 0.55s; --bar-target: 78%; }
+.signal-row-3 .signal-bar-fill { animation-delay: 0.80s; --bar-target: 85%; }
+.signal-row-4 .signal-bar-fill { animation-delay: 1.05s; --bar-target: 70%; }
+@keyframes bar-fill {
+  from { width: 0; }
+  to   { width: var(--bar-target); }
+}
+.signal-score {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 3px;
+  text-align: right;
+}
+.signal-diagram-footer {
+  background: var(--fg);
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+  min-width: 0;
+  animation: float-a 5s ease-in-out infinite;
+}
+@keyframes float-a {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+.signal-diagram-footer .rec-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(168,224,221,0.2);
+  border: 1px solid rgba(168,224,221,0.4);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent-mid);
+  flex-shrink: 0;
+}
+.signal-diagram-footer .rec-badge .dot-pulse {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent-mid);
+  animation: dot-pulse 2.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes dot-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.45; transform: scale(0.75); }
+}
+.signal-diagram-footer .rec-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.signal-diagram-footer .rec-text em {
+  font-style: normal;
+  color: var(--accent-mid);
+}
+
+/* HOW AI DECIDES */
+.how-section {
+  padding: 96px 0;
+  background: var(--surface);
+}
+.how-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: center;
+  width: 100%;
+}
+.how-copy { min-width: 0; width: 100%; }
+.how-copy h2 {
+  font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+  margin-top: 14px;
+  margin-bottom: 22px;
+}
+.how-copy h2 em { font-style: italic; color: var(--accent); }
+.how-copy p {
+  color: var(--fg-muted);
+  font-size: 1.05rem;
+  line-height: 1.75;
+  margin-bottom: 18px;
+}
+.signal-factors {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 8px;
+  min-width: 0;
+  width: 100%;
+}
+.signal-factor {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: border-color 0.25s, background 0.25s;
+  min-width: 0;
+}
+.signal-factor:hover {
+  border-color: var(--border-strong);
+  background: var(--accent-light);
+}
+.signal-factor .sf-icon {
+  width: 36px; height: 36px;
+  min-width: 36px;
+  border-radius: 9px;
+  background: var(--accent-light);
+  border: 1.5px solid var(--border);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.signal-factor .sf-icon svg { width: 17px; height: 17px; color: var(--accent); }
+.signal-factor .sf-text { min-width: 0; }
+.signal-factor .sf-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--fg);
+  margin-bottom: 3px;
+  overflow-wrap: anywhere;
+  display: block;
+}
+.signal-factor .sf-desc {
+  font-size: 13.5px;
+  color: var(--fg-muted);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  display: block;
+}
+
+/* AI query card */
+.how-visual { min-width: 0; width: 100%; }
+.ai-query-card {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  min-width: 0;
+}
+.aqc-header {
+  background: var(--fg);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.aqc-dots { display: flex; gap: 6px; }
+.aqc-dots i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+.aqc-title {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.04em;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.aqc-live {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--accent-mid);
+}
+.aqc-live .live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent-mid);
+  animation: dot-pulse 2.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.aqc-body { padding: 20px 18px; display: flex; flex-direction: column; gap: 14px; }
+.aqc-query {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+.aqc-checking { display: flex; flex-direction: column; gap: 8px; }
+.aqc-check-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--fg-muted);
+}
+.aqc-check-row .ck-dot {
+  width: 8px; height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.ck-pass { background: var(--accent); }
+.ck-fail { background: #e57373; }
+.ck-miss { background: #e0e0e0; }
+.aqc-answer {
+  background: linear-gradient(135deg, var(--accent-light), var(--surface-2));
+  border: 1.5px solid var(--border-strong);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.aqc-answer .ans-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-dark);
+  margin-bottom: 8px;
+}
+.aqc-answer .ans-text {
+  font-size: 13.5px;
+  color: var(--fg);
+  line-height: 1.55;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.aqc-answer .ans-text .hl {
+  color: var(--accent-dark);
+  font-weight: 700;
+  background: rgba(24,164,155,0.12);
+  border-radius: 3px;
+  padding: 1px 4px;
+}
+
+/* COMPARISON */
+.comparison-section {
+  padding: 96px 0;
+  background: var(--bg);
+}
+.comparison-section .section-head {
+  max-width: 680px;
+  margin: 0 auto 52px;
+  text-align: center;
+}
+.comparison-section .section-head h2 {
+  font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+  margin-top: 14px;
+  margin-bottom: 16px;
+}
+.comparison-section .section-head p {
+  color: var(--fg-muted);
+  font-size: 1.05rem;
+}
+.comparison-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1.5px solid var(--border);
+}
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+  font-size: 15px;
+}
+.comparison-table th {
+  background: var(--fg);
+  color: white;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 18px 22px;
+  text-align: left;
+  letter-spacing: -0.01em;
+}
+.comparison-table th:first-child {
+  width: 34%;
+  background: var(--fg);
+}
+.comparison-table th.col-seo {
+  background: rgba(15,34,36,0.88);
+  text-align: center;
+}
+.comparison-table th.col-aeo {
+  background: var(--accent);
+  text-align: center;
+}
+.comparison-table td {
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.comparison-table tr:last-child td { border-bottom: none; }
+.comparison-table td:first-child {
+  font-weight: 700;
+  color: var(--fg);
+  font-size: 14px;
+  background: var(--surface);
+}
+.comparison-table td.col-seo {
+  color: var(--fg-muted);
+  font-size: 14px;
+  text-align: center;
+  background: var(--bg);
+}
+.comparison-table td.col-aeo {
+  color: var(--accent-dark);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  background: var(--accent-light);
+}
+.comparison-table tr:hover td { filter: brightness(0.97); }
+.comparison-note {
+  margin-top: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  font-size: 15px;
+  color: var(--fg-muted);
+  line-height: 1.65;
+}
+.comparison-note svg {
+  width: 20px; height: 20px;
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* FAQ */
+.faq-section {
+  padding: 96px 0;
+  background: var(--surface);
+}
+.faq-section .section-head {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 48px;
+}
+.faq-section .section-head h2 {
+  font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+  margin-top: 14px;
+}
+.faq-list {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+}
+details.faq-item {
+  border-bottom: 1.5px solid var(--border);
+  min-width: 0;
+}
+details.faq-item:first-child {
+  border-top: 1.5px solid var(--border);
+}
+details.faq-item summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 4px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--fg);
+  cursor: pointer;
+  min-height: 44px;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: color 0.2s;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+details.faq-item summary::-webkit-details-marker { display: none; }
+details.faq-item summary::marker { display: none; }
+details.faq-item summary:hover { color: var(--accent); }
+details.faq-item summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.faq-chevron {
+  width: 22px; height: 22px;
+  min-width: 22px;
+  border-radius: 6px;
+  background: var(--accent-light);
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: background 0.25s;
+}
+.faq-chevron svg { width: 12px; height: 12px; color: var(--accent); transition: transform 0.3s ease; }
+details.faq-item[open] summary .faq-chevron svg { transform: rotate(45deg); }
+details.faq-item[open] summary .faq-chevron { background: var(--accent); }
+details.faq-item[open] summary .faq-chevron svg { color: white; }
+details.faq-item[open] summary { color: var(--accent); }
+.faq-answer {
+  padding: 0 4px 22px;
+  color: var(--fg-muted);
+  font-size: 0.99rem;
+  line-height: 1.72;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* CTA SECTION */
+.cta-section {
+  padding: 96px 0;
+  background: var(--fg);
+  position: relative;
+  overflow: hidden;
+  max-width: none;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 90% -10%, rgba(24,164,155,0.22), transparent 60%),
+    radial-gradient(ellipse 400px 300px at -5% 110%, rgba(24,164,155,0.14), transparent 60%);
+  pointer-events: none;
+  max-width: none;
+}
+.cta-inner-centered {
+  position: relative;
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.cta-inner-centered .eyebrow {
+  color: var(--accent-mid);
+  justify-content: center;
+}
+.cta-inner-centered .eyebrow::before { background: var(--accent-mid); }
+.cta-inner-centered h2 {
+  font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+  color: white;
+  margin-top: 16px;
+  margin-bottom: 18px;
+}
+.cta-inner-centered h2 em { font-style: italic; color: var(--accent-mid); }
+.cta-inner-centered p {
+  color: rgba(255,255,255,0.65);
+  font-size: 1.08rem;
+  line-height: 1.72;
+  margin-bottom: 36px;
+}
+.cta-inner-centered .cta-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.cta-inner-centered .btn-primary {
+  background: var(--accent);
+  color: white;
+  font-size: 16px;
+  padding: 15px 28px;
+}
+.cta-inner-centered .btn-primary:hover { background: var(--accent-dark); }
+.cta-inner-centered .btn-ghost {
+  color: rgba(255,255,255,0.75);
+  border-color: rgba(255,255,255,0.3);
+}
+.cta-inner-centered .btn-ghost:hover {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border-color: rgba(255,255,255,0.5);
+}
+.cta-trust-row {
+  margin-top: 28px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.cta-trust-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+.cta-trust-pill svg {
+  width: 13px; height: 13px;
+  color: var(--accent-mid);
+  flex-shrink: 0;
+}
+
+/* STICKY MOBILE CTA */
+.sticky-cta-bar {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 90;
+  background: var(--fg);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 12px 20px;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.18);
+  max-width: none;
+}
+.sticky-cta-bar .btn { width: 100%; justify-content: center; }
+
+/* FOOTER */
+footer.site-footer {
+  background: var(--fg);
+  color: rgba(255,255,255,0.7);
+  padding: 64px 0 0;
+  max-width: none;
+}
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 48px;
+  width: 100%;
+}
+.footer-brand { min-width: 0; }
+.footer-brand img {
+  height: 42px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  margin-bottom: 14px;
+}
+.footer-brand p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.7;
+  max-width: 30ch;
+  margin-top: 10px;
+  overflow-wrap: anywhere;
+}
+.footer-col { min-width: 0; }
+.footer-col h4 {
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 16px;
+  margin-top: 0;
+}
+.footer-col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-col ul a {
+  font-size: 14.5px;
+  color: rgba(255,255,255,0.6);
+  transition: color 0.2s;
+  overflow-wrap: anywhere;
+}
+.footer-col ul a:hover { color: var(--accent-mid); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.09);
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: rgba(255,255,255,0.35);
+  overflow-wrap: anywhere;
+}
+.footer-bottom a { color: rgba(255,255,255,0.45); transition: color 0.2s; }
+.footer-bottom a:hover { color: var(--accent-mid); }
+.footer-sep { margin: 0 6px; opacity: 0.4; }
+
+/* ENTRANCE ANIMATIONS */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.rise     { animation: rise 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.d1 { animation-delay: 0.10s; }
+.d2 { animation-delay: 0.20s; }
+.d3 { animation-delay: 0.30s; }
+.d4 { animation-delay: 0.42s; }
+.d5 { animation-delay: 0.54s; }
+.d6 { animation-delay: 0.66s; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .hero-inner { gap: 40px; }
+  .how-inner  { gap: 40px; }
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 36px; }
+}
+@media (max-width: 768px) {
+  .header-nav { display: none; }
+  .header-cta .btn { display: none; }
+  .hamburger { display: flex; }
+
+  .hero { padding: 120px 0 80px; min-height: auto; }
+  .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+
+  .how-section { padding: 64px 0; }
+  .how-inner { grid-template-columns: 1fr; gap: 36px; }
+
+  .comparison-section { padding: 64px 0; }
+  .faq-section { padding: 64px 0; }
+  .cta-section { padding: 64px 0; }
+
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
+
+  .sticky-cta-bar { display: flex; }
+  body { padding-bottom: 72px; }
+}
+@media (max-width: 480px) {
+  .container { padding: 0 18px; }
+  .hero-copy h1 { font-size: 1.75rem; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; text-align: center; gap: 8px; }
+  .hero-trust { gap: 8px; }
+  .comparison-table th,
+  .comparison-table td { padding: 13px 14px; font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+  .rise { animation: none !important; opacity: 1 !important; transform: none !important; }
+  #dot-wave { display: none; }
+  .signal-bar-fill { width: var(--bar-target); }
+}
+/* --- visual edits --- */
+#iqeg{height:48px;width:auto;max-width:160px;}#ham-icon-close{display:none;}#itif3c{margin-top:14px;}#itmos1{background:#ff5f57;}#i8ioed{background:#febc2e;}#iu76pj{background:#28c840;}#i9mg72{font-size:12.5px;color:var(--fg-faint);margin-top:14px;text-align:center;line-height:1.5;}#iwhdf7{margin-top:14px;}#i3lqel{margin-top:14px;}#ixq3xi{height:42px;width:auto;max-width:160px;filter:brightness(0) invert(1);opacity:0.85;}
+</style>
+
+<link rel="canonical" href="https://www.onetrendyowl.com/aeo-explained.html">
+<script type="application/ld+json" id="wb-schema">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://www.onetrendyowl.com/#organization", "name": "One Trendy Owl Digital", "url": "https://www.onetrendyowl.com/", "email": "hello@onetrendyowl.com"}, {"@type": "WebPage", "@id": "https://www.onetrendyowl.com/aeo-explained.html#webpage", "url": "https://www.onetrendyowl.com/aeo-explained.html", "name": "AEO Explained | One Trendy Owl Digital - What Is Answer Engine Optimization?", "description": "Learn what Answer Engine Optimization (AEO) is, how AI search engines like ChatGPT, Perplexity, and Google Gemini decide who to recommend, and why your business needs AEO now.", "inLanguage": "en", "isPartOf": {"@type": "WebSite", "@id": "https://www.onetrendyowl.com/#website", "url": "https://www.onetrendyowl.com/", "name": "One Trendy Owl Digital", "publisher": {"@id": "https://www.onetrendyowl.com/#organization"}, "inLanguage": "en"}, "breadcrumb": {"@id": "https://www.onetrendyowl.com/aeo-explained.html#breadcrumb"}, "speakable": {"@type": "SpeakableSpecification", "cssSelector": ["h1"]}}, {"@type": "BreadcrumbList", "@id": "https://www.onetrendyowl.com/aeo-explained.html#breadcrumb", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.onetrendyowl.com/"}, {"@type": "ListItem", "position": 2, "name": "AEO Explained", "item": "https://www.onetrendyowl.com/aeo-explained.html"}]}, {"@type": "ItemList", "@id": "https://www.onetrendyowl.com/aeo-explained.html#navigation", "itemListElement": [{"@type": "SiteNavigationElement", "position": 1, "name": "Home", "url": "https://www.onetrendyowl.com/"}, {"@type": "SiteNavigationElement", "position": 2, "name": "About", "url": "https://www.onetrendyowl.com/about.html"}, {"@type": "SiteNavigationElement", "position": 3, "name": "Services", "url": "https://www.onetrendyowl.com/services.html"}, {"@type": "SiteNavigationElement", "position": 4, "name": "AEO Explained", "url": "https://www.onetrendyowl.com/aeo-explained.html"}, {"@type": "SiteNavigationElement", "position": 5, "name": "Contact", "url": "https://www.onetrendyowl.com/contact.html"}]}]}</script>
+<style id="oto-fix">a:empty{display:none}img.oto-logo{height:42px!important;width:auto!important;max-width:160px!important;min-height:0!important;padding:0!important;padding-inline:0!important;filter:none!important;opacity:1!important}</style></head>
+<body>
+<header id="site-header" class="site-header"><div class="header-row"><a href="index.html" aria-label="One Trendy Owl Digital home" class="header-brand"></a><nav aria-label="Main navigation" class="header-nav"><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="aeo-explained.html" class="active">AEO Explained</a></li><li><a href="contact.html">Contact</a></li></ul></nav><div class="header-cta"><a href="contact.html" class="btn btn-primary">
+        Book Free Consultation
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a><button id="nav-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu" class="hamburger"><svg id="ham-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg><svg id="ham-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"></path></svg></button></div></div></header><div id="mobile-menu" role="dialog" aria-modal="false" aria-label="Navigation menu" class="mobile-menu"><a href="index.html" class="mob-link">Home</a><a href="about.html" class="mob-link">About</a><a href="services.html" class="mob-link">Services</a><a href="aeo-explained.html" class="mob-link">AEO Explained</a><a href="contact.html" class="mob-link">Contact</a><div class="mob-cta"><a href="contact.html" class="btn btn-primary">
+      Book Free Consultation
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a></div></div><main><!-- HERO --><section id="hero" class="hero"><canvas id="dot-wave" aria-hidden="true"></canvas><div class="container"><div class="hero-inner"><div class="hero-copy"><span class="eyebrow rise">AEO Explained</span><h1 class="rise d1">
+          What Is Answer Engine Optimization, and Why Does Your Business
+          <em>Need It Now?</em></h1><p class="sub rise d2">
+          Search is changing faster than most business owners realize. AI engines like ChatGPT, Perplexity, and Google Gemini no longer show ten blue links and let the user decide. They give a single answer or a short list of names. Here is what AEO is, why it matters, and what happens to businesses that ignore it.
+        </p><div class="cta-row rise d3"><a href="contact.html" class="btn btn-primary">
+            Book My Free Consultation
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a><a href="services.html" class="btn btn-ghost">
+            See Our Services
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a></div><div class="hero-trust rise d4"><span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7"></path></svg>
+            No tech knowledge needed
+          </span><span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7"></path></svg>
+            Audit from $99
+          </span><span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7"></path></svg>
+            Done for you, end to end
+          </span></div></div><div class="hero-visual rise d2"><div aria-label="AEO signal strength indicators" class="signal-diagram"><div class="signal-row signal-row-1"><span aria-hidden="true" class="signal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M8 12h8M8 8h5M8 16h3"></path></svg></span><span class="signal-label"><span class="sl-title">Structured Data</span><span class="sl-sub">Schema markup quality</span></span><span aria-hidden="true" class="signal-bar-wrap"><span class="signal-bar-track"><span class="signal-bar-fill"></span></span><span class="signal-score">92%</span></span></div><div class="signal-row signal-row-2"><span aria-hidden="true" class="signal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z"></path></svg></span><span class="signal-label"><span class="sl-title">Content Clarity</span><span class="sl-sub">Answer-ready formatting</span></span><span aria-hidden="true" class="signal-bar-wrap"><span class="signal-bar-track"><span class="signal-bar-fill"></span></span><span class="signal-score">78%</span></span></div><div class="signal-row signal-row-3"><span aria-hidden="true" class="signal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01z"></path></svg></span><span class="signal-label"><span class="sl-title">Authority Signals</span><span class="sl-sub">Trust and credibility markers</span></span><span aria-hidden="true" class="signal-bar-wrap"><span class="signal-bar-track"><span class="signal-bar-fill"></span></span><span class="signal-score">85%</span></span></div><div class="signal-row signal-row-4"><span aria-hidden="true" class="signal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"></path></svg></span><span class="signal-label"><span class="sl-title">Web Consistency</span><span class="sl-sub">NAP and citation alignment</span></span><span aria-hidden="true" class="signal-bar-wrap"><span class="signal-bar-track"><span class="signal-bar-fill"></span></span><span class="signal-score">70%</span></span></div><div role="status" aria-label="AI recommendation status" class="signal-diagram-footer"><span class="rec-badge"><span class="dot-pulse"></span>AI Result</span><span class="rec-text">Recommended: <em>Your Business Name</em></span></div></div></div></div></div></section><!-- HOW AI DECIDES --><section id="how-ai-decides" class="how-section"><div class="container"><div class="how-inner"><div class="how-copy"><span class="eyebrow">How AI Decides</span><h2 class="rise" id="itif3c">How AI Search Engines <em>Decide Who to Recommend</em></h2><p class="rise d1">
+          Traditional search engines rank ten websites on a page and let the user decide. AI search engines work differently. When someone asks ChatGPT, Perplexity, or Google Gemini a question like "What is the best accountant near me?" or "Which e-commerce platform should I use for a small store?", the AI gives a single answer or a short list of specific names.
+        </p><p class="rise d2">
+          To decide which businesses to include in that answer, AI engines look at four key signals on your website and across the web. If those signals are weak or missing, you do not appear. That is true no matter how good your service actually is.
+        </p><p class="rise d3">
+          Answer Engine Optimization is the practice of making sure every one of those signals is strong, clear, and correctly formatted so AI engines can read, trust, and recommend your business.
+        </p><div class="signal-factors rise d4"><div class="signal-factor"><span aria-hidden="true" class="sf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M8 12h8M8 8h5M8 16h3"></path></svg></span><span class="sf-text"><span class="sf-title">Structured data on your website</span><span class="sf-desc">Schema markup that tells AI engines exactly who you are, what you do, and where you are located.</span></span></div><div class="signal-factor"><span aria-hidden="true" class="sf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z"></path></svg></span><span class="sf-text"><span class="sf-title">Clarity of your content</span><span class="sf-desc">Answer-ready pages that directly address the questions buyers actually ask AI engines.</span></span></div><div class="signal-factor"><span aria-hidden="true" class="sf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01z"></path></svg></span><span class="sf-text"><span class="sf-title">Authority signals</span><span class="sf-desc">Reviews, citations, and third-party mentions that confirm your business is legitimate and trusted.</span></span></div><div class="signal-factor"><span aria-hidden="true" class="sf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"></path></svg></span><span class="sf-text"><span class="sf-title">Consistency across the web</span><span class="sf-desc">Your name, address, and details matching perfectly everywhere AI engines gather data from.</span></span></div></div></div><div class="how-visual rise d2"><div aria-label="Example AI search query and response" class="ai-query-card"><div class="aqc-header"><span aria-hidden="true" class="aqc-dots"><i id="itmos1"></i><i id="i8ioed"></i><i id="iu76pj"></i></span><span class="aqc-title">AI Search Engine</span><span class="aqc-live"><span class="live-dot"></span>LIVE</span></div><div class="aqc-body"><div class="aqc-query">"What is the best accountant for a small business near me?"</div><div aria-label="AI signal checks" class="aqc-checking"><div class="aqc-check-row"><span aria-label="Pass" class="ck-dot ck-pass"></span>
+                Structured data found and validated
+              </div><div class="aqc-check-row"><span aria-label="Pass" class="ck-dot ck-pass"></span>
+                Content clearly describes service and audience
+              </div><div class="aqc-check-row"><span aria-label="Pass" class="ck-dot ck-pass"></span>
+                Strong review authority confirmed
+              </div><div class="aqc-check-row"><span aria-label="Issue detected" class="ck-dot ck-fail"></span>
+                Web citation consistency: gaps detected
+              </div><div class="aqc-check-row"><span aria-label="Not implemented" class="ck-dot ck-miss"></span>
+                FAQ schema: not implemented
+              </div></div><div class="aqc-answer"><div class="ans-label">AI Recommendation</div><div class="ans-text">Based on available data, I recommend <span class="hl">Sunrise Accounting</span> for small business owners in your area. They specialize in sole traders and micro-businesses, have strong verified reviews, and offer a free initial call.</div></div></div></div><p id="i9mg72">
+          Businesses with complete AEO signals get recommended. Those without them are invisible, even with great services.
+        </p></div></div></div></section><!-- COMPARISON --><section id="aeo-vs-seo" class="comparison-section"><div class="container"><div class="section-head"><span class="eyebrow">The Difference</span><h2 class="rise" id="iwhdf7">AEO vs. Traditional SEO: What Is the Difference?</h2><p class="rise d1">SEO and AEO share the same goal: get your business in front of the right people. But they work at different layers of the web, and you need both.</p></div><div class="comparison-table-wrap rise d1"><table role="table" aria-label="AEO versus traditional SEO comparison" class="comparison-table"><thead><tr><th scope="col">What it affects</th><th scope="col" class="col-seo">Traditional SEO</th><th scope="col" class="col-aeo">Answer Engine Optimization</th></tr></thead><tbody><tr><td>Where you appear</td><td class="col-seo">Ranking positions on a search results page</td><td class="col-aeo">Direct recommendations inside AI answers</td></tr><tr><td>Primary optimization targets</td><td class="col-seo">Keywords and backlinks</td><td class="col-aeo">Structured data, entity clarity, and answer-ready content</td></tr><tr><td>How results appear</td><td class="col-seo">A list of clickable links the user chooses from</td><td class="col-aeo">Named recommendations or cited sources inside an AI response</td></tr><tr><td>Who controls the result</td><td class="col-seo">The user picks from the results page</td><td class="col-aeo">The AI picks and recommends directly</td></tr><tr><td>Technical foundation needed</td><td class="col-seo">On-page optimization, meta tags, link building</td><td class="col-aeo">Schema markup, FAQ schema, entity recognition, citation consistency</td></tr><tr><td>Works best with</td><td class="col-seo">Long-form content, keyword-rich pages</td><td class="col-aeo">Concise, question-and-answer formatted content</td></tr></tbody></table></div><div class="comparison-note rise d2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg><span>SEO and AEO are not competing strategies. A well-optimized website benefits from both. AEO adds the structured data and content layers that AI engines specifically look for, building directly on top of your existing SEO foundation.</span></div></div></section><!-- FAQ --><section id="faq" class="faq-section"><div class="container"><div class="section-head"><span class="eyebrow">Common Questions</span><h2 class="rise" id="i3lqel">Questions We Hear from Small Business Owners</h2></div><div class="faq-list"><details class="faq-item"><summary>
+          Do I need to rebuild my website to get AEO benefits?
+          <span aria-hidden="true" class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M12 5v14M5 12h14"></path></svg></span></summary><div class="faq-answer">
+          No. We work within your existing site and make targeted improvements without disrupting what you already have. In most cases, AEO improvements are additions to your current site, not a replacement of it. No redesign, no new platform required.
+        </div></details><details class="faq-item"><summary>
+          How quickly will I see results from AEO?
+          <span aria-hidden="true" class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M12 5v14M5 12h14"></path></svg></span></summary><div class="faq-answer">
+          AI search visibility typically improves within 4 to 8 weeks of implementing structured data and content changes, though timelines vary by industry and how competitive your niche is. Your audit will show you a prioritized list of changes with the fastest expected impact.
+        </div></details><details class="faq-item"><summary>
+          Is AEO just for tech companies or large brands?
+          <span aria-hidden="true" class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M12 5v14M5 12h14"></path></svg></span></summary><div class="faq-answer">
+          Not at all. Local plumbers, dentists, consultants, and e-commerce stores all benefit from AI recommendations, often more than large brands. When someone asks an AI engine "Find me a plumber in Bristol," a small well-optimized local business can appear ahead of a national chain because its local signals are stronger.
+        </div></details><details class="faq-item"><summary>
+          What if I do not have a big budget?
+          <span aria-hidden="true" class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M12 5v14M5 12h14"></path></svg></span></summary><div class="faq-answer">
+          Our AI Search Audit starts at $99. It is designed to give small businesses a clear starting point without a large upfront investment. You will know exactly where you stand and what the highest-priority fixes are, with no obligation to purchase any additional services afterward.
+        </div></details><details class="faq-item"><summary>
+          Will AEO replace my existing SEO work?
+          <span aria-hidden="true" class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M12 5v14M5 12h14"></path></svg></span></summary><div class="faq-answer">
+          No. AEO builds on your existing SEO foundation. We add the structured data and content layers that AI engines specifically need. Think of it as an upgrade to your existing strategy, not a replacement. Your Google rankings are not affected negatively by AEO work.
+        </div></details><details class="faq-item"><summary>
+          Do I need to know anything technical to get started?
+          <span aria-hidden="true" class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M12 5v14M5 12h14"></path></svg></span></summary><div class="faq-answer">
+          Nothing at all. We handle every technical step, including schema markup, structured data, and chatbot setup, from start to finish. You will never need to write code, log into your CMS back-end, or understand the technical details. We send you a plain-English report when each step is complete.
+        </div></details></div></div></section><!-- CTA --><section id="lead-form" class="cta-section"><div class="container"><div class="cta-inner-centered rise"><span class="eyebrow">Ready to Get Started?</span><h2>Find Out Where You Stand in <em>AI Search</em> Today</h2><p>
+        Book a free 15-minute consultation and we will give you a straight answer about your current AI search visibility and the fastest way to improve it. No pitch, no pressure. Just honest answers.
+      </p><div class="cta-row"><a href="contact.html" class="btn btn-primary">
+          Book My Free Consultation
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a><a href="services.html" class="btn btn-ghost">
+          View All Services
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a></div><div class="cta-trust-row"><span class="cta-trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7"></path></svg>
+          Free, no obligation
+        </span><span class="cta-trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7"></path></svg>
+          Audit from $99
+        </span><span class="cta-trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7"></path></svg>
+          No long-term contracts
+        </span></div></div></div></section></main><div aria-hidden="true" class="sticky-cta-bar"><a href="contact.html" class="btn btn-primary">
+    Book My Free Consultation
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a></div><footer aria-label="Site footer" class="site-footer"><div class="container"><div class="footer-inner"><div class="footer-brand"><a href="index.html" aria-label="One Trendy Owl Digital home"></a><p>AEO specialists helping small businesses and e-commerce stores get recommended by ChatGPT, Perplexity, and Google Gemini, worldwide.</p></div><div class="footer-col"><h4>Pages</h4><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="aeo-explained.html">AEO Explained</a></li><li><a href="contact.html">Contact</a></li></ul></div><div class="footer-col"><h4>Services</h4><ul><li><a href="services.html">AI Search Audit</a></li><li><a href="services.html">Schema Markup Setup</a></li><li><a href="services.html">Full AEO Overhaul</a></li><li><a href="services.html">AI Chatbot Integration</a></li></ul></div><div class="footer-col"><h4>Get Started</h4><ul><li><a href="contact.html">Free Consultation</a></li><li><a href="contact.html">Contact Us</a></li><li><a href="aeo-explained.html">What is AEO?</a></li><li><a href="mailto:hello@onetrendyowl.com">hello@onetrendyowl.com</a></li></ul></div></div><div id="imsfb" class="footer-bottom"> © 2026 One Trendy Owl Digital. All rights reserved.</div></div></footer>
+<script>
+(function () {
+  'use strict';
+
+  var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var header = document.getElementById('site-header');
+  function updateNav() {
+    if (window.scrollY > 10) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+
+  var toggle    = document.getElementById('nav-toggle');
+  var menu      = document.getElementById('mobile-menu');
+  var iconOpen  = document.getElementById('ham-icon-open');
+  var iconClose = document.getElementById('ham-icon-close');
+
+  function openMenu() {
+    menu.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    iconOpen.style.display  = 'none';
+    iconClose.style.display = 'block';
+  }
+  function closeMenu() {
+    menu.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    iconOpen.style.display  = 'block';
+    iconClose.style.display = 'none';
+  }
+
+  toggle.addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (menu.classList.contains('open')) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('#nav-toggle') && !e.target.closest('#mobile-menu')) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  menu.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', closeMenu);
+  });
+
+  if (!reducedMotion) {
+    var canvas = document.getElementById('dot-wave');
+    if (canvas) {
+      var ctx = canvas.getContext('2d');
+      var DPR = Math.min(window.devicePixelRatio || 1, 2);
+      var SPACING  = 28;
+      var DOT_R    = 1.8;
+      var WAVE_SPD = 0.45;
+      var AR = 24, AG = 164, AB = 155;
+
+      function resize() {
+        var parent = canvas.parentElement;
+        var W = parent.offsetWidth;
+        var H = parent.offsetHeight;
+        canvas.style.width  = W + 'px';
+        canvas.style.height = H + 'px';
+        canvas.width  = Math.round(W * DPR);
+        canvas.height = Math.round(H * DPR);
+      }
+      resize();
+
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resize, 120);
+      }, { passive: true });
+
+      var startTime = null;
+
+      function drawFrame(ts) {
+        if (!startTime) startTime = ts;
+        var t = (ts - startTime) / 1000;
+        var W = canvas.width;
+        var H = canvas.height;
+        ctx.clearRect(0, 0, W, H);
+
+        var cols = Math.ceil(W / (SPACING * DPR)) + 1;
+        var rows = Math.ceil(H / (SPACING * DPR)) + 1;
+
+        for (var r = 0; r < rows; r++) {
+          for (var c = 0; c < cols; c++) {
+            var cx = c * SPACING * DPR;
+            var cy = r * SPACING * DPR;
+            var wave = Math.sin(c * 0.018 * DPR * 4 + r * 0.018 * DPR * 3 + t * WAVE_SPD) * 0.5
+                     + Math.sin(c * 0.018 * DPR * 2 - t * WAVE_SPD * 0.7) * 0.3
+                     + Math.sin(r * 0.018 * DPR * 2.5 + t * WAVE_SPD * 0.5) * 0.2;
+            var norm     = (wave + 1) / 2;
+            var minAlpha = 0.06;
+            var maxAlpha = 0.38;
+            var alpha    = minAlpha + norm * (maxAlpha - minAlpha);
+            var radius   = DOT_R * DPR * (0.7 + norm * 0.6);
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, 6.2832);
+            ctx.fillStyle = 'rgba(' + AR + ',' + AG + ',' + AB + ',' + alpha.toFixed(3) + ')';
+            ctx.fill();
+          }
+        }
+        requestAnimationFrame(drawFrame);
+      }
+      requestAnimationFrame(drawFrame);
+    }
+  }
+
+})();
+</script>
+<script>/*pa-page-ping*/(function(){try{if(window.parent===window)return;var p=location.pathname||"/";window.parent.postMessage({type:"pa:page",path:p},"*");}catch(e){}})();</script>
+
+<script>(function(){function link(t){for(var n=t;n&&n!==document.body;n=n.parentElement){if(n.tagName==="A"&&n.href&&n.href.indexOf("/functions/v1/pay-checkout")!==-1)return n;}return null;}function fire(){try{if(window.fbq)window.fbq("track","InitiateCheckout");}catch(x){}try{if(window.gtag)window.gtag("event","begin_checkout");}catch(x){}}document.addEventListener("click",function(e){var a=link(e.target);if(!a)return;if(!window.fbq&&!window.gtag)return;if(a.getAttribute("data-ck"))return;if(a.target==="_blank"||e.metaKey||e.ctrlKey||e.shiftKey){fire();return;}e.preventDefault();a.setAttribute("data-ck","1");fire();setTimeout(function(){window.location.href=a.href;},300);},true);})();</script>
+
+<script>(function(){function intr(el){for(var n=el;n&&n!==document.body;n=n.parentElement){var t=(n.tagName||"").toLowerCase();if(t==="nav"||t==="header"||t==="details"||t==="summary"||t==="dialog")return true;if(n.hasAttribute&&(n.hasAttribute("aria-haspopup")||n.hasAttribute("aria-expanded")||n.hasAttribute("aria-controls")))return true;var r=n.getAttribute&&n.getAttribute("role");if(r&&/menu|dialog|tooltip|listbox|tablist|tab|menuitem/i.test(r))return true;var c=(n.className&&n.className.baseVal!==undefined)?n.className.baseVal:(""+(n.className||""));if(/dropdown|drop-down|submenu|sub-menu|menu|modal|popover|tooltip|offcanvas|drawer|accordion|collapse|nav-/i.test(c))return true;}return false;}function f(){var n=document.querySelectorAll("body *");for(var i=0;i<n.length;i++){var el=n[i];try{var cs=getComputedStyle(el);if(cs.position==="absolute"||cs.position==="fixed"||cs.position==="sticky")continue;if(intr(el))continue;var cls=(el.className&&el.className.baseVal!==undefined)?el.className.baseVal:(""+(el.className||""));if(parseFloat(cs.opacity)===0&&(/opacity/.test(cs.transition)||/reveal|fade|appear|in-?view|scroll|animate-/i.test(cls))){el.style.opacity="1";el.style.transform="none";el.style.filter="none";}}catch(e){}}}if(document.readyState!=="loading"){setTimeout(f,400);}else{window.addEventListener("load",function(){setTimeout(f,400);});}})();</script>
+</body>
+</html>
