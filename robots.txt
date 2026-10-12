@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.onetrendyowl.com/sitemap.xml
