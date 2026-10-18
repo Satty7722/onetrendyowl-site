@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Free AEO Check | One Trendy Owl</title>
+<meta name="description" content="Find out whether ChatGPT, Perplexity, Google AI and Bing Copilot mention your business. Free AEO check from One Trendy Owl.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--s1:#0b0f10;--line:#1c2a2c;--tx:#fff;--mut:#b5c2c4;--ac:#01a89e;--ac2:#01857c}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font:400 1.0625rem/1.55 Poppins,system-ui,sans-serif}
+a{color:var(--ac)}:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+section{padding:96px 0}h1,h2,h3{line-height:1.1;font-weight:700}
+h1{font-size:clamp(2.5rem,6vw,4.5rem)}h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:24px}h3{font-size:1.25rem;margin-bottom:8px}
+p{max-width:65ch;color:var(--mut)}.ac{color:var(--ac)}
+.mark{font-family:'JetBrains Mono',monospace;letter-spacing:.18em;font-size:.875rem}
+header{position:sticky;top:0;z-index:10;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;justify-content:space-between;align-items:center;height:64px}
+.tag{font-size:.625rem;color:var(--ac);letter-spacing:.3em;display:block}
+.btn{display:inline-flex;align-items:center;min-height:48px;padding:0 32px;border-radius:999px;background:var(--ac);color:#000;font-weight:600;text-decoration:none;border:0;font:600 1rem Poppins,sans-serif;cursor:pointer;transition:box-shadow .3s,transform .3s}
+.btn:hover{box-shadow:0 0 32px rgba(1,168,158,.6);transform:translateY(-2px)}
+.btn.sm{min-height:44px;padding:0 24px;font-size:.875rem}
+/* hero beams */
+.hero{position:relative;overflow:hidden;padding:128px 0 96px;text-align:center}
+.hero p{margin:24px auto 40px;font-size:1.25rem}
+.beams{position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(1,168,158,.25),transparent 70%)}
+.beams i{position:absolute;top:-20%;width:1px;height:140%;background:linear-gradient(transparent,var(--ac),transparent);opacity:.35;animation:beam 7s linear infinite}
+@keyframes beam{0%{transform:translateY(-60%) rotate(18deg)}100%{transform:translateY(60%) rotate(18deg)}}
+.grid-bg{position:absolute;inset:0;z-index:-2;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at center,#000 20%,transparent 70%)}
+.reveal-word{display:inline-block;opacity:0;transform:translateY(24px);filter:blur(8px);animation:rw .7s forwards}
+@keyframes rw{to{opacity:1;transform:none;filter:none}}
+/* marquee */
+.marquee{overflow:hidden;border-block:1px solid var(--line);padding:24px 0;mask-image:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent)}
+.track{display:flex;gap:64px;width:max-content;animation:mq 30s linear infinite}
+.track span{font-family:'JetBrains Mono',monospace;color:var(--mut);white-space:nowrap}.track b{color:var(--ac)}
+@keyframes mq{to{transform:translateX(-50%)}}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:48px}
+.card{position:relative;padding:32px;border:1px solid var(--line);border-radius:16px;background:var(--s1);overflow:hidden}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(400px circle at var(--x,50%) var(--y,50%),rgba(1,168,158,.18),transparent 40%);opacity:0;transition:opacity .3s}
+.card:hover::before{opacity:1}.card:hover{border-color:var(--ac2)}
+.num{font-family:'JetBrains Mono',monospace;color:var(--ac);font-size:.875rem;margin-bottom:16px;display:block}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.ph{border:2px dashed var(--ac2);border-radius:16px;min-height:320px;display:grid;place-items:center;color:var(--mut);font-family:'JetBrains Mono',monospace;font-size:.875rem;text-align:center;padding:24px}
+ul.ticks{list-style:none;margin-top:24px}ul.ticks li{padding:8px 0 8px 32px;position:relative;color:var(--mut)}ul.ticks li::before{content:"✓";position:absolute;left:0;color:var(--ac)}
+details{border-bottom:1px solid var(--line);padding:24px 0}summary{cursor:pointer;font-weight:600;font-size:1.125rem;min-height:44px;display:flex;align-items:center}details p{margin-top:8px}
+.cta{text-align:center;background:radial-gradient(ellipse at center,rgba(1,168,158,.15),transparent 70%)}
+form{max-width:480px;margin:40px auto 0;display:grid;gap:16px;text-align:left}
+label{font-size:.875rem;font-weight:600}input{width:100%;min-height:48px;margin-top:8px;padding:0 16px;border-radius:8px;border:1px solid var(--line);background:var(--s1);color:#fff;font:inherit}
+input:focus{border-color:var(--ac);outline:none;box-shadow:0 0 0 3px rgba(1,168,158,.3)}
+.note{font-size:.875rem;color:var(--mut)}#ok{color:var(--ac);text-align:center}
+footer{border-top:1px solid var(--line);padding:40px 0;font-size:.875rem;color:var(--mut)}footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.fade{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}.fade.in{opacity:1;transform:none}
+@media(max-width:760px){section{padding:64px 0}.hero{padding:96px 0 64px}.split{grid-template-columns:1fr}.ph{min-height:220px}header .btn{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}.reveal-word,.fade{opacity:1;transform:none;filter:none}}
+</style></head><body>
+<header><div class="wrap"><div><span class="mark">ONE TRENDY OWL</span><span class="tag">WITH PERFECTION</span></div><a class="btn sm" href="#check">Get my free AEO check</a></div></header>
+<main>
+<section class="hero">
+<img src="logo-black-wide-1600.svg" alt="One Trendy Owl — Get Found by AI Search" style="width:min(560px,88vw);height:auto;border-radius:16px;margin:0 auto 32px;display:block"><div class="beams" aria-hidden="true"></div><div class="grid-bg" aria-hidden="true"></div>
+<div class="wrap"><h1 id="hl">Is AI recommending <span class="ac">your business?</span></h1>
+<p class="fade">Find out whether ChatGPT, Perplexity, Google AI and Bing Copilot mention you, and see exactly where the gaps are. Built for B2B founders and coaches.</p>
+<a class="btn" href="#check">Get my free AEO check</a></div></section>
+<div class="marquee" aria-label="AI engines we check"><div class="track"><span><b>●</b> ChatGPT</span><span><b>●</b> Perplexity</span><span><b>●</b> Google AI Overviews</span><span><b>●</b> Bing Copilot</span><span><b>●</b> ChatGPT</span><span><b>●</b> Perplexity</span><span><b>●</b> Google AI Overviews</span><span><b>●</b> Bing Copilot</span><span aria-hidden="true"><b>●</b> ChatGPT</span><span aria-hidden="true"><b>●</b> Perplexity</span><span aria-hidden="true"><b>●</b> Google AI Overviews</span><span aria-hidden="true"><b>●</b> Bing Copilot</span><span aria-hidden="true"><b>●</b> ChatGPT</span><span aria-hidden="true"><b>●</b> Perplexity</span><span aria-hidden="true"><b>●</b> Google AI Overviews</span><span aria-hidden="true"><b>●</b> Bing Copilot</span></div></div>
+<section><div class="wrap split"><div class="fade"><h2>Your buyers ask AI first.</h2><p>When a prospect asks an AI assistant who can help them, it answers with a short list of names. If yours isn't on it, you never get the chance to be compared. Often the businesses it names are your competitors.</p></div>
+<div class="ph fade" role="img" aria-label="Photo placeholder">Photo: realistic person, pending</div></div></section>
+<section><div class="wrap"><h2 class="fade">How it works</h2>
+<div class="cols"><div class="card fade"><span class="num">01</span><h3>Audit</h3><p>We ask the main AI engines the questions your buyers ask and record who gets mentioned.</p></div>
+<div class="card fade"><span class="num">02</span><h3>Optimise</h3><p>We show which pages, facts and answers are missing so AI can understand what you do.</p></div>
+<div class="card fade"><span class="num">03</span><h3>Get cited</h3><p>You fix the gaps with clear, quotable content that gives AI a reason to mention you.</p></div></div></div></section>
+<section><div class="wrap split"><div class="ph fade" role="img" aria-label="Photo placeholder">Photo: realistic person, pending</div>
+<div class="fade"><h2>What you get in the free check</h2><ul class="ticks"><li>Whether ChatGPT, Perplexity, Google AI and Bing Copilot mention you</li><li>Which other businesses they name instead</li><li>The key gaps on your site, in plain English</li><li>Three priority fixes you can start on</li></ul></div></div></section>
+<section><div class="wrap" style="max-width:760px"><h2 class="fade">FAQ</h2>
+<details><summary>What is AEO?</summary><p>Answer Engine Optimisation: making your business easy for AI assistants to find, understand and mention.</p></details>
+<details><summary>Is the check really free?</summary><p>Yes. No card and no obligation.</p></details>
+<details><summary>How will I receive it?</summary><p>We send a short written report to your email.</p></details>
+<details><summary>Do you guarantee AI will mention me?</summary><p>No one can. We show you the gaps and how to close them.</p></details></div></section>
+<section class="cta" id="check"><div class="wrap"><h2 class="fade">See where you stand in AI search</h2><p class="fade" style="margin:0 auto">Tell us where to look. Your report arrives by email.</p>
+<!-- TODO: connect this form to a backend / CRM (e.g. HubSpot form) before publishing. No submission is sent yet. -->
+<form id="f" novalidate><label>Name<input name="name" required autocomplete="name"></label><label>Email<input type="email" name="email" required autocomplete="email"></label><label>Website<input type="url" name="website" required placeholder="https://" autocomplete="url"></label>
+<button class="btn" type="submit" style="justify-content:center">Get my free AEO check</button><p id="ok" role="status" aria-live="polite"></p></form></div></section>
+</main>
+<footer><div class="wrap"><div><span class="mark">ONE TRENDY OWL</span> <span class="tag" style="display:inline;margin-left:8px">WITH PERFECTION</span></div><span>© 2026 One Trendy Owl · onetrendyowl.com</span></div></footer>
+<script>
+const h=document.getElementById('hl');let i=0;h.querySelectorAll(':scope>*,:scope').forEach(()=>{});
+(function split(el){[...el.childNodes].forEach(n=>{if(n.nodeType===3){const f=document.createDocumentFragment();n.textContent.split(/(\s+)/).forEach(w=>{if(!w.trim()){f.append(w);return}const s=document.createElement('span');s.className='reveal-word';s.style.animationDelay=(i++*0.08)+'s';s.textContent=w;f.append(s)});n.replaceWith(f)}else split(n)})})(h);
+const b=document.querySelector('.beams');[8,22,38,55,70,86].forEach((l,k)=>{const e=document.createElement('i');e.style.left=l+'%';e.style.animationDelay=(-k*1.3)+'s';b.append(e)});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});document.querySelectorAll('.fade').forEach(e=>io.observe(e));
+document.querySelectorAll('.card').forEach(c=>c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--x',e.clientX-r.left+'px');c.style.setProperty('--y',e.clientY-r.top+'px')}));
+document.getElementById('f').addEventListener('submit',e=>{e.preventDefault();const f=e.target;if(!f.checkValidity()){f.reportValidity();return}document.getElementById('ok').textContent='Thanks. This is a draft, so nothing was sent yet.'});
+</script></body></html>
