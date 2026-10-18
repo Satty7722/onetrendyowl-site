@@ -39,7 +39,7 @@ header .wrap{display:flex;justify-content:space-between;align-items:center;heigh
 .card:hover::before{opacity:1}.card:hover{border-color:var(--ac2)}
 .num{font-family:'JetBrains Mono',monospace;color:var(--ac);font-size:.875rem;margin-bottom:16px;display:block}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-.ph{border:2px dashed var(--ac2);border-radius:16px;min-height:320px;display:grid;place-items:center;color:var(--mut);font-family:'JetBrains Mono',monospace;font-size:.875rem;text-align:center;padding:24px}
+.photo{width:100%;height:100%;min-height:320px;object-fit:cover;border-radius:16px;display:block}
 ul.ticks{list-style:none;margin-top:24px}ul.ticks li{padding:8px 0 8px 32px;position:relative;color:var(--mut)}ul.ticks li::before{content:"✓";position:absolute;left:0;color:var(--ac)}
 details{border-bottom:1px solid var(--line);padding:24px 0}summary{cursor:pointer;font-weight:600;font-size:1.125rem;min-height:44px;display:flex;align-items:center}details p{margin-top:8px}
 .cta{text-align:center;background:radial-gradient(ellipse at center,rgba(1,168,158,.15),transparent 70%)}
@@ -49,7 +49,7 @@ input:focus{border-color:var(--ac);outline:none;box-shadow:0 0 0 3px rgba(1,168,
 .note{font-size:.875rem;color:var(--mut)}#ok{color:var(--ac);text-align:center}
 footer{border-top:1px solid var(--line);padding:40px 0;font-size:.875rem;color:var(--mut)}footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
 .fade{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}.fade.in{opacity:1;transform:none}
-@media(max-width:760px){section{padding:64px 0}.hero{padding:96px 0 64px}.split{grid-template-columns:1fr}.ph{min-height:220px}header .btn{display:none}}
+@media(max-width:760px){section{padding:64px 0}.hero{padding:96px 0 64px}.split{grid-template-columns:1fr}.photo{min-height:220px}header .btn{display:none}}
 @media(prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}.reveal-word,.fade{opacity:1;transform:none;filter:none}}
 </style></head><body>
 <header><div class="wrap"><div><span class="mark">ONE TRENDY OWL</span><span class="tag">WITH PERFECTION</span></div><a class="btn sm" href="#check">Get my free AEO check</a></div></header>
@@ -61,12 +61,12 @@ footer{border-top:1px solid var(--line);padding:40px 0;font-size:.875rem;color:v
 <a class="btn" href="#check">Get my free AEO check</a></div></section>
 <div class="marquee" aria-label="AI engines we check"><div class="track"><span><b>●</b> ChatGPT</span><span><b>●</b> Perplexity</span><span><b>●</b> Google AI Overviews</span><span><b>●</b> Bing Copilot</span><span><b>●</b> ChatGPT</span><span><b>●</b> Perplexity</span><span><b>●</b> Google AI Overviews</span><span><b>●</b> Bing Copilot</span><span aria-hidden="true"><b>●</b> ChatGPT</span><span aria-hidden="true"><b>●</b> Perplexity</span><span aria-hidden="true"><b>●</b> Google AI Overviews</span><span aria-hidden="true"><b>●</b> Bing Copilot</span><span aria-hidden="true"><b>●</b> ChatGPT</span><span aria-hidden="true"><b>●</b> Perplexity</span><span aria-hidden="true"><b>●</b> Google AI Overviews</span><span aria-hidden="true"><b>●</b> Bing Copilot</span></div></div>
 <section><div class="wrap split"><div class="fade"><h2>Your buyers ask AI first.</h2><p>When a prospect asks an AI assistant who can help them, it answers with a short list of names. If yours isn't on it, you never get the chance to be compared. Often the businesses it names are your competitors.</p></div>
-<div class="ph fade" role="img" aria-label="Photo placeholder">Photo: realistic person, pending</div></div></section>
+<img class="photo fade" src="photo-buyers.svg" alt="Business founder in a warm home office" width="1200" height="675" loading="lazy"></div></section>
 <section><div class="wrap"><h2 class="fade">How it works</h2>
 <div class="cols"><div class="card fade"><span class="num">01</span><h3>Audit</h3><p>We ask the main AI engines the questions your buyers ask and record who gets mentioned.</p></div>
 <div class="card fade"><span class="num">02</span><h3>Optimise</h3><p>We show which pages, facts and answers are missing so AI can understand what you do.</p></div>
 <div class="card fade"><span class="num">03</span><h3>Get cited</h3><p>You fix the gaps with clear, quotable content that gives AI a reason to mention you.</p></div></div></div></section>
-<section><div class="wrap split"><div class="ph fade" role="img" aria-label="Photo placeholder">Photo: realistic person, pending</div>
+<section><div class="wrap split"><img class="photo fade" src="photo-check.svg" alt="Coach smiling during a video call with a client" width="1200" height="675" loading="lazy">
 <div class="fade"><h2>What you get in the free check</h2><ul class="ticks"><li>Whether ChatGPT, Perplexity, Google AI and Bing Copilot mention you</li><li>Which other businesses they name instead</li><li>The key gaps on your site, in plain English</li><li>Three priority fixes you can start on</li></ul></div></div></section>
 <section><div class="wrap" style="max-width:760px"><h2 class="fade">FAQ</h2>
 <details><summary>What is AEO?</summary><p>Answer Engine Optimisation: making your business easy for AI assistants to find, understand and mention.</p></details>
